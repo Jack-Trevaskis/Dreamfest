@@ -14,10 +14,22 @@ beforeEach(async () => {
 
 afterAll(async () => {
   await connection.destroy()
-})
+})  
 
 describe('Deleting an Event', () => {
-  it.todo('can be deleted', async () => {
+  it('can be deleted', async () => {
     // TODO: write server integration test for event delete
+
+    const event = await request(server).get('/api/v1/events/1')
+    expect(event.status).toBe(200)
+
+    const deletedEvent = await request(server).delete('/api/v1/events/1')
+    expect(deletedEvent.status).toBe(204)
+
+    const deletedEvent1 = await request(server).delete('/api/v1/events/1')
+    expect(deletedEvent1.status).toBe(404)
+
+    const checkDelete = await request(server).get('/api/v1/events/1')
+    expect(checkDelete.status).toBe(404)
   })
 })
