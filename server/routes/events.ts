@@ -27,7 +27,9 @@ router.post('/', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try {
     const id = Number(req.params.id)
-    // TODO: DELETE the event with this matching ID
+    const deleteCount = await db.deleteEvent(id)
+    if (deleteCount === 0) res.status(404).json({message: "uh oh delete no worky"})
+    
     res.sendStatus(204)
   } catch (e) {
     next(e)
