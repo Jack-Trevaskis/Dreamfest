@@ -7,7 +7,7 @@ export default function useCreateEvent() {
   return useMutation({
     mutationFn: async (data: EventData) => {
       await request.post('/api/v1/events').send(data)
-    },
+    }, 
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['schedule'] })
     },

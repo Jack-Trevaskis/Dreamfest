@@ -8,13 +8,17 @@ const router = express.Router()
 export default router
 
 router.post('/', async (req, res, next) => {
+
+  console.log('aight we at least got this far')
   try {
     const { name, description, time, locationId } = req.body
     const day = validateDay(req.body.day)
-    const id = 0 // TODO: call your new db.addNewEvent function and use the returned ID
+    const event = await db.addNewEvent(name, description, day, time, locationId)
+    const id = event[0] // TODO: call your new db.addNewEvent function and use the returned ID
     const url = `/api/v1/events/${id}`
     res.setHeader('Location', url)
     res.status(201).json({ location: url })
+
   } catch (e) {
     next(e)
   }
