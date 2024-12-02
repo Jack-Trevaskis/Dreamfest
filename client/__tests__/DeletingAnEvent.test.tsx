@@ -28,25 +28,26 @@ const fakeLocations = {
   ],
 }
 
+
 describe('Deleting an event', () => {
   it('shows current data on the form', async () => {
+
     const eventScope = nock('http://localhost')
-      .get('/api/v1/events/1')
-      .reply(200, fakeEvent)
+    .get('/api/v1/events/1')
+    .reply(200, fakeEvent)
 
-    const locationScope = nock('http://localhost')
-      .get('/api/v1/locations')
-      .reply(200, fakeLocations)
+  const locationScope = nock('http://localhost')
+    .get('/api/v1/locations')
+    .reply(200, fakeLocations)
 
-    // ARRANGE
     const { ...screen } = setupApp('/events/1/edit')
-    // ACT
-    // ASSERT
+   
     const nameInput = await screen.findByLabelText('Event name')
     const descriptionInput = await screen.findByLabelText('Description')
 
     expect(nameInput).toBeVisible()
     expect(nameInput).toHaveValue('Slushie Apocalypse I')
+
     expect(descriptionInput).toBeInTheDocument()
     expect(descriptionInput).toHaveValue(
       'This event will be taking place at the TangleStage. Be sure to not miss the free slushies cause they are rad!',
@@ -56,10 +57,18 @@ describe('Deleting an event', () => {
     expect(locationScope.isDone()).toBe(true)
   })
 
-  it.todo('deletes the event when the delete button is clicked', async () => {
+  it('deletes the event when the delete button is clicked', async () => {
     // TODO: write client integration test for event delete
-    // ARRANGE
-    // ACT
-    // ASSERT
+  
+   const {user, ...screen} = setupApp('/events/1/edit')
+   const deleteButton = await screen.findByText('Delete event')
+
+   const deleteScope = nock('http://localhost')
+    .delete('/api/v1/events/1').reply(204)
+    
+  await user.click(deleteButton)
+
+  expect(deleteScope.isDone()).toBe(true)
+  expect(screen.queryByText('Slushie Apocalypse I')).not.toBeInTheDocument()
   })
 })
