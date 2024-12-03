@@ -59,9 +59,13 @@ describe('Deleting an event', () => {
 
   it('deletes the event when the delete button is clicked', async () => {
     // TODO: write client integration test for event delete
+
+    const eventScope = nock('http://localhost')
+    .get('/api/v1/events/1')
+    .reply(200, fakeEvent)
   
    const {user, ...screen} = setupApp('/events/1/edit')
-   const deleteButton = await screen.findByText('Delete event')
+   const deleteButton = await screen.findByLabelText("Delete event")
 
    const deleteScope = nock('http://localhost')
     .delete('/api/v1/events/1').reply(204)
@@ -69,6 +73,7 @@ describe('Deleting an event', () => {
   await user.click(deleteButton)
 
   expect(deleteScope.isDone()).toBe(true)
+  expect(eventScope.isDone()).toBe(true)
   expect(screen.queryByText('Slushie Apocalypse I')).not.toBeInTheDocument()
   })
 })

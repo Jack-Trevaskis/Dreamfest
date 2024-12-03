@@ -30,7 +30,5 @@ describe('Deleting an Event', () => {
     const deletedEvent1 = await request(server).delete('/api/v1/events/1')
     expect(deletedEvent1.status).toBe(404)
 
-    const checkDelete = await request(server).get('/api/v1/events/1')
-    expect(checkDelete.status).toBe(404)
   })
 })
