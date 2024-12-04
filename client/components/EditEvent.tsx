@@ -44,11 +44,18 @@ export default function EditEvent() {
         onSubmit={handleSubmit}
       />
       <form onSubmit={handleDelete} className="form">
-        <div>
-          <label htmlFor="delete-event" className="label">Delete event</label>
-          <button id="delete-event" type="submit" className="delete">Delete event</button>
-        </div>
-      </form>
+  <div>
+    <button
+      id="delete-event"
+      type="submit"
+      className="delete"
+      aria-label="Delete event"
+    >
+      Delete event
+    </button>
+  </div>
+</form>
+
     </>
   )
 }
